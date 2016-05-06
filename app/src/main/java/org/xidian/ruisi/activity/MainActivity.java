@@ -6,6 +6,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
@@ -57,8 +58,11 @@ public class MainActivity extends AppCompatActivity {
         myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList, titleContainer);
         viewPager.setAdapter(myFragmentPagerAdapter);
         viewPager.setCurrentItem(0);//设置当前显示标签页为第一页
+        viewPager.setOverScrollMode(View.OVER_SCROLL_NEVER);
         tabLayout.setupWithViewPager(viewPager);
+        viewPager.requestDisallowInterceptTouchEvent(true);
         tabLayout.setTabsFromPagerAdapter(myFragmentPagerAdapter);
+        viewPager.setOffscreenPageLimit(6);
     }
 
     private static void initTitle() {
@@ -67,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         titleContainer.add("板块");
         titleContainer.add("发现");
         titleContainer.add("我的");
+//        titleContainer.add("搞笑");
+//        titleContainer.add("焦点");
+//        titleContainer.add("影视");
     }
 
     @Override

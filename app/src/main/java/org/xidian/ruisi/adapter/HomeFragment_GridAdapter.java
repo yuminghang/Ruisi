@@ -14,14 +14,14 @@ import org.xidian.ruisi.R;
 /**
  * Created by ymh on 2016/5/6.
  */
-public class Home_GridAdapter extends BaseAdapter {
+public class HomeFragment_GridAdapter extends BaseAdapter {
     private int[] mDrawableList;
     private String[] mNameList;
     private LayoutInflater mInflater;
     private Context mContext;
     LinearLayout.LayoutParams params;
 
-    public Home_GridAdapter(Context context, String[] nameList, int[] drawableList) {
+    public HomeFragment_GridAdapter(Context context, String[] nameList, int[] drawableList) {
         mNameList = nameList;
         mDrawableList = drawableList;
         mContext = context;
@@ -46,7 +46,7 @@ public class Home_GridAdapter extends BaseAdapter {
         ItemViewTag viewTag;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.home_item, null);
+            convertView = mInflater.inflate(R.layout.home_gridview_item, null);
             // construct an item tag
             viewTag = new ItemViewTag((ImageView) convertView.findViewById(R.id.grid_icon), (TextView) convertView.findViewById(R.id.grid_name));
             convertView.setTag(viewTag);

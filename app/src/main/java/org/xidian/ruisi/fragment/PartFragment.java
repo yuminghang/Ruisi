@@ -5,8 +5,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
+import android.widget.Toast;
 
 import org.xidian.ruisi.R;
 import org.xidian.ruisi.adapter.GridAdapter;
@@ -33,6 +35,7 @@ public class PartFragment extends Fragment {
             , "校园交易", "版聊专区", "失物招领", "校园活动", "就业招聘", "技术博客", "软件技术交流",
 
     };
+    private boolean isShowLike = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +48,27 @@ public class PartFragment extends Fragment {
         gridView = (GridView) view.findViewById(R.id.gridView);
         //新建List
         //配置适配器
-        gridView.setAdapter(new GridAdapter(getActivity(), mNameList, icon));
+        final GridAdapter mGridAdapter = new GridAdapter(getActivity(), mNameList, icon);
+        gridView.setAdapter(mGridAdapter);
+        gridView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (isShowLike) {
+                    isShowLike = false;
+                } else {
+                    isShowLike = true;
+                }
+                mGridAdapter.setIsShowDelete(isShowLike);
+                return true;
+            }
+        });
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getActivity(), "外面！！点击了！！！" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

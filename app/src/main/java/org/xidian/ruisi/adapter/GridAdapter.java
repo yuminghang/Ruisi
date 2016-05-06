@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.xidian.ruisi.R;
 
@@ -19,7 +20,7 @@ public class GridAdapter extends BaseAdapter {
     private String[] mNameList;
     private LayoutInflater mInflater;
     private Context mContext;
-    LinearLayout.LayoutParams params;
+    private boolean isShowLike;
 
     public GridAdapter(Context context, String[] nameList, int[] drawableList) {
         mNameList = nameList;
@@ -42,13 +43,14 @@ public class GridAdapter extends BaseAdapter {
         return position;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ItemViewTag viewTag;
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.item, null);
             // construct an item tag
-            viewTag = new ItemViewTag((ImageView) convertView.findViewById(R.id.grid_icon), (TextView) convertView.findViewById(R.id.grid_name));
+            viewTag = new ItemViewTag((ImageView) convertView.findViewById(R.id.grid_icon),
+                    (ImageView) convertView.findViewById(R.id.like), (TextView) convertView.findViewById(R.id.grid_name));
             convertView.setTag(viewTag);
         } else {
             viewTag = (ItemViewTag) convertView.getTag();
@@ -56,15 +58,27 @@ public class GridAdapter extends BaseAdapter {
 
         // set name
         viewTag.mName.setText(mNameList[position]);
-
+        viewTag.like.setVisibility(isShowLike ? View.VISIBLE : View.GONE);
+        viewTag.like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(mContext, "点击了！！！" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
         // set icon
         viewTag.mIcon.setImageResource(mDrawableList[position]);
 //        viewTag.mIcon.setLayoutParams(params);
         return convertView;
     }
 
+    public void setIsShowDelete(boolean isShowLike) {
+        this.isShowLike = isShowLike;
+        notifyDataSetChanged();
+    }
+
     class ItemViewTag {
         protected ImageView mIcon;
+        protected ImageView like;
         protected TextView mName;
 
         /**
@@ -73,9 +87,10 @@ public class GridAdapter extends BaseAdapter {
          * @param name the name view of the item
          * @param icon the icon view of the item
          */
-        public ItemViewTag(ImageView icon, TextView name) {
+        public ItemViewTag(ImageView icon, ImageView like, TextView name) {
             this.mName = name;
             this.mIcon = icon;
+            this.like = like;
         }
     }
 }
