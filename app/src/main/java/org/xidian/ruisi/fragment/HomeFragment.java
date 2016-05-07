@@ -1,13 +1,18 @@
 package org.xidian.ruisi.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -21,6 +26,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.xidian.ruisi.R;
+import org.xidian.ruisi.activity.WebViewActivity;
 import org.xidian.ruisi.adapter.HomeFragment_ListView_Adapter;
 import org.xidian.ruisi.adapter.HomeFragment_ViewPagerAdapter;
 import org.xidian.ruisi.adapter.HomeFragment_GridAdapter;
@@ -52,6 +58,8 @@ public class HomeFragment extends Fragment {
     HomeFragment_ListViewData data;
     int start, start1, end, end1;
     private View view_Bar;
+    private View topBar;
+    private String url;
 
     Handler handler = new Handler() {
         @Override
@@ -61,6 +69,7 @@ public class HomeFragment extends Fragment {
             show();
         }
     };
+
 
     // 将数据填充到ListView中
     private void show() {
@@ -116,11 +125,14 @@ public class HomeFragment extends Fragment {
                 start1 = commentNums.indexOf("\"num\">") + 6;
                 end1 = commentNums.indexOf("</span>");
                 commentNums = commentNums.substring(start1, end1);
+                url = element.getElementsByTag("a").get(0).attributes().toString();
+                url = url.substring(7, url.length() - 1);
                 Map<String, Object> map = new HashMap<>();
                 data = new HomeFragment_ListViewData();
                 data.setTitle(title);
                 data.setAuthor(author);
                 data.setCommentNums(commentNums);
+                data.setUrl(url);
                 datas.add(data);
             }
             // 执行完毕后给handler发送一个空消息
@@ -155,35 +167,39 @@ public class HomeFragment extends Fragment {
     }
 
     private void initListView() {
+
+//        topBar = view.findViewById(R.id.top_bar);
         listView = (ListView) view.findViewById(R.id.listView);
-
-        final String[] temp = {"789", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "789", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "789", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377", "102", "377", "456", "789", "102", "377", "456", "789", "102", "377"};
-        listView.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return temp.length;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return temp[position];
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView textView = new TextView(getActivity());
-                textView.setText(temp[position]);
-                return textView;
-            }
-        });
         listView.addHeaderView(view_ViewPager);
         listView.addHeaderView(view_GridView);
         listView.addHeaderView(view_Bar);
         listView.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                Log.e("123213", firstVisibleItem + "");
+//                if (3 <= firstVisibleItem) {
+//                    topBar.setVisibility(View.VISIBLE);
+//                }else {
+//                    topBar.setVisibility(View.GONE);
+//                }
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("sdasa", position + "");
+                Bundle bundle = new Bundle();
+                bundle.putString("url", datas.get(position - 3).getUrl());
+                Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                intent.putExtras(bundle);
+                getActivity().startActivity(intent);
+            }
+        });
     }
 }

@@ -5,4 +5,5 @@ package org.xidian.ruisi.api;
  */
 public class Apis {
     public static String HOTNEWS = "http://bbs.rs.xidian.me/forum.php?mod=guide&view=hot&mobile=2";
+    public static String BASEURL = "http://bbs.rs.xidian.me/";
 }
