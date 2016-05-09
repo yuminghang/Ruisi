@@ -17,7 +17,7 @@ import org.xidian.ruisi.R;
  */
 public class GridAdapter extends BaseAdapter {
     private int[] mDrawableList;
-    private String[] mNameList;
+    private static String[] mNameList;
     private LayoutInflater mInflater;
     private Context mContext;
     private boolean isShowLike;
@@ -29,6 +29,12 @@ public class GridAdapter extends BaseAdapter {
         mInflater = LayoutInflater.from(context);
 //        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 //        params.gravity = Gravity.CENTER;
+    }
+
+    public void setData(String[] list) {
+        mNameList = new String[]{""};
+        mNameList = list;
+        notifyDataSetChanged();
     }
 
     public int getCount() {
