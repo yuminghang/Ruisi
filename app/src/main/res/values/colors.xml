@@ -3,11 +3,16 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="background">#FEFCF0</color>
+    <color name="background1">#FBFBFB</color>
+    <color name="background">#ffffff</color>
     <color name="gary">#E1E1E1</color>
     <color name="black">#000000</color>
     <color name="pink">#e8989a</color>
     <color name="ivory">#fffff0</color>
+    <color name="lightblue">#56abe4</color>
+    <color name="mychoice">#11b7f3</color>
+    <color name="mychoice_dark">#9a9a9a</color>
+
     <!-- 象牙色 -->
     <color name="lightyellow">#ffffe0</color>
     <!-- 亮黄色 -->
@@ -159,7 +164,6 @@
     <!-- 苍宝石绿 -->
     <color name="greenyellow">#adff2f</color>
     <!-- 黄绿色 -->
-    <color name="lightblue">#add8e6</color>
     <!-- 亮蓝色 -->
     <color name="darkgray">#a9a9a9</color>
     <!-- 暗灰色 -->

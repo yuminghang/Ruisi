@@ -25,4 +25,5 @@ dependencies {
     compile 'com.android.support:design:22.2.0'
     compile files('libs/jsoup-1.9.1.jar')
     compile files('libs/glide-3.7.0.jar')
+    compile 'com.squareup.okhttp:okhttp:2.7.5'
 }

@@ -19,10 +19,15 @@ import com.bumptech.glide.Glide;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.xidian.ruisi.R;
+import org.xidian.ruisi.adapter.CommentListAdapter;
 import org.xidian.ruisi.api.Apis;
+import org.xidian.ruisi.bean.NewsDetailData;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WebViewActivity extends AppCompatActivity {
     private String url, title;
@@ -37,34 +42,22 @@ public class WebViewActivity extends AppCompatActivity {
     private ImageView avatarView;
     private TextView authorView;
     private TextView timeView;
-    private String avatar;
-    private String author;
-    private String time;
-    private String lastEditTime;
-    int start, start1, start2, end2, end, end1;
+    private TextView positionView;
+    List<NewsDetailData> datas = new ArrayList<NewsDetailData>();
+    private Elements elements;
+    private Elements kidsData;
+    private BaseAdapter mListAdapter;
+    private NewsDetailData author;
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             // 收到消息后执行handler
-            show();
+            mListAdapter.notifyDataSetChanged();
         }
     };
 
-    private void show() {
-//        if (datas.size() == 0) {
-////            TextView message = (TextView) findViewById(R.id.message);
-////            message.setText(R.string.message);
-//        } else {
-//            HomeFragment_ListView_Adapter adapter = new HomeFragment_ListView_Adapter(getActivity(), datas);
-//            listView.setAdapter(adapter);
-//        }
-        mWebView.loadDataWithBaseURL(null, contentHtml, "text/html", "utf-8", null);
-        Glide.with(this).load(avatar).into(avatarView);
-        authorView.setText(author);
-        timeView.setText(time);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,48 +66,19 @@ public class WebViewActivity extends AppCompatActivity {
         initView();
         url = Apis.BASEURL + getIntent().getStringExtra("url");
         url = url.replaceAll("&amp;", "&");
-//        pb = (ProgressBar) findViewById(R.id.pb);
-//        pb.setVisibility(View.VISIBLE);
-//        webview.loadUrl(url);
         getData();
     }
 
     private void initView() {
         view_WebView = View.inflate(this, R.layout.webview_item, null);
-        avatarView = (ImageView) view_WebView.findViewById(R.id.avatar);
         authorView = (TextView) view_WebView.findViewById(R.id.author);
         timeView = (TextView) view_WebView.findViewById(R.id.time);
         mWebView = (WebView) view_WebView.findViewById(R.id.webView);
         mWebView.getSettings().setJavaScriptEnabled(false);
         mWebView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         listView = (ListView) findViewById(R.id.listView);
-        listView.addHeaderView(view_WebView);
-        final String[] temp = new String[]{
-                "12323", "12323", "12323", "12323", "12323", "12323", "12323", "12323"
-        };
-        listView.setAdapter(new BaseAdapter() {
-            @Override
-            public int getCount() {
-                return temp.length;
-            }
-
-            @Override
-            public Object getItem(int position) {
-                return temp[position];
-            }
-
-            @Override
-            public long getItemId(int position) {
-                return position;
-            }
-
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                TextView textView = new TextView(WebViewActivity.this);
-                textView.setText(temp[position]);
-                return textView;
-            }
-        });
+        mListAdapter = new CommentListAdapter(this, datas);
+        listView.setAdapter(mListAdapter);
     }
 
     private void getData() {
@@ -152,55 +116,9 @@ public class WebViewActivity extends AppCompatActivity {
              end2 += 13;
              contentHtml = contentHtml.substring(0, start2) + contentHtml.substring(end2);
              */
-//            for (int i = 0; i < elements.get(0).children().size(); i++) {
-//                Element element = elements.get(0).children().get(i);
-//                String title = element.getElementsByTag("a").get(0).childNodes().get(0).toString();
-//                String author = element.getElementsByTag("a").get(0).childNodes().get(1).toString();
-////                start = author.indexOf("\"by\">") + 5;
-////                end = author.indexOf("</span>");
-////                author = author.substring(start, end);
-////                String commentNums = element.getElementsByTag("a").get(0).childNodes().get(3).toString();
-////                start1 = commentNums.indexOf("\"num\">") + 6;
-////                end1 = commentNums.indexOf("</span>");
-////                commentNums = commentNums.substring(start1, end1);
-////                url = element.getElementsByTag("a").get(0).attributes().toString();
-////                url = url.substring(7, url.length() - 1);
-////                Map<String, Object> map = new HashMap<>();
-////                data = new HomeFragment_ListViewData();
-////                data.setTitle(title);
-////                data.setAuthor(author);
-////                data.setCommentNums(commentNums);
-////                data.setUrl(url);
-////                datas.add(data);
-//            }
             // 执行完毕后给handler发送一个空消息
-            doc.getElementsByAttributeValue("class", "plc cl");
-
-//            Elements elements = doc.select("ul.hotlist");
-//            for (int i = 0; i < elements.get(0).children().size(); i++) {
-//                Element element = elements.get(0).children().get(i);
-//                String title = element.getElementsByTag("a").get(0).childNodes().get(0).toString();
-//                String author = element.getElementsByTag("a").get(0).childNodes().get(1).toString();
-//                start = author.indexOf("\"by\">") + 5;
-//                end = author.indexOf("</span>");
-//                author = author.substring(start, end);
-//                String commentNums = element.getElementsByTag("a").get(0).childNodes().get(3).toString();
-//                start1 = commentNums.indexOf("\"num\">") + 6;
-//                end1 = commentNums.indexOf("</span>");
-//                commentNums = commentNums.substring(start1, end1);
-//                url = element.getElementsByTag("a").get(0).attributes().toString();
-//                url = url.substring(7, url.length() - 1);
-//                Map<String, Object> map = new HashMap<>();
-//                data = new HomeFragment_ListViewData();
-//                data.setTitle(title);
-//                data.setAuthor(author);
-//                data.setCommentNums(commentNums);
-//                data.setUrl(url);
-//                datas.add(data);
-//
+            elements = doc.select("div.postlist");
             setTopic();
-            setAvatar();
-            setComment();
             setNextPage();
             setPreviousPage();
             handler.sendEmptyMessage(0);
@@ -209,25 +127,22 @@ public class WebViewActivity extends AppCompatActivity {
 
 
     private void setTopic() {
-        topic = doc.getElementsByAttributeValue("class", "plc cl").get(0).toString();
-//        contentHtml = Jsoup.parse((Jsoup.parse(topic.toString()).select("li.grey")).toString()).getElementsByTag("b").select("img").toString();
-//        contentHtml = Jsoup.parse(topic).select("div.message").text().toString();
 
-    }
-
-    private void setAvatar() {
-        avatar = Jsoup.parse(topic).select("span.avatar").select("img").toString();
-        start = avatar.indexOf("src=\"");
-        start += 5;
-        end = avatar.indexOf("\" style=");
-        avatar = avatar.substring(start, end);
-        author = Jsoup.parse(Jsoup.parse((Jsoup.parse(topic).select("li.grey")).
-                toString()).getElementsByTag("b").toString()).getElementsByTag("a").text().toString();
-        time = Jsoup.parse(Jsoup.parse((Jsoup.parse(topic.toString()).select("li")).get(1).toString()).toString()).text().substring(2);
-    }
-
-    private void setComment() {
-
+        kidsData = doc.select("div[id^=pid]");
+        for (int i = 0; i < kidsData.size(); i++) {
+            NewsDetailData follower = new NewsDetailData();
+            if (0 == i) {
+                follower.title = doc.select("h2").text().trim();
+            } else {
+                follower.position = kidsData.get(i).select("li.grey").select("em").text();
+            }
+            follower.avatar = kidsData.get(i).select("span.avatar").select("img").attr("src");
+            follower.position = kidsData.get(i).select("li.grey").select("em").text();
+            follower.id = kidsData.get(i).select("li.grey").select("b").select("a").text();
+            follower.time = kidsData.get(i).select("li.grey.rela").text();
+            follower.content = kidsData.get(i).select("div.message").text();
+            datas.add(i, follower);
+        }
     }
 
     private void setNextPage() {

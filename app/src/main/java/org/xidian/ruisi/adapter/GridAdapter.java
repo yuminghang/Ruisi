@@ -11,38 +11,48 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xidian.ruisi.R;
+import org.xidian.ruisi.bean.GridViewBean;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by ymh on 2016/5/6.
  */
 public class GridAdapter extends BaseAdapter {
     private int[] mDrawableList;
-    private static String[] mNameList;
-    private LayoutInflater mInflater;
     private Context mContext;
-    private boolean isShowLike;
+    List<ArrayList<GridViewBean>> news = new ArrayList<ArrayList<GridViewBean>>();
+    private int pos = 0;
 
-    public GridAdapter(Context context, String[] nameList, int[] drawableList) {
-        mNameList = nameList;
+    public GridAdapter(Context context, int[] drawableList) {
         mDrawableList = drawableList;
         mContext = context;
-        mInflater = LayoutInflater.from(context);
-//        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-//        params.gravity = Gravity.CENTER;
     }
 
-    public void setData(String[] list) {
-        mNameList = new String[]{""};
-        mNameList = list;
+    public void setData(int position) {
+        this.pos = position;
+        notifyDataSetChanged();
+    }
+
+    public void notifyAll(List<ArrayList<GridViewBean>> news) {
+        this.news = news;
         notifyDataSetChanged();
     }
 
     public int getCount() {
-        return mNameList.length;
+        if (news.size() > 0) {
+            return news.get(pos).size();
+        }
+        return 0;
     }
 
     public Object getItem(int position) {
-        return mNameList[position];
+        if (news.size() > 0) {
+            return news.get(pos).get(position);
+        }
+        return null;
     }
 
     public long getItemId(int position) {
@@ -53,47 +63,42 @@ public class GridAdapter extends BaseAdapter {
         ItemViewTag viewTag;
 
         if (convertView == null) {
-            convertView = mInflater.inflate(R.layout.item, null);
+            convertView = View.inflate(mContext, R.layout.item, null);
+//            convertView = mInflater.inflate(R.layout.item, null);
             // construct an item tag
             viewTag = new ItemViewTag((ImageView) convertView.findViewById(R.id.grid_icon),
-                    (ImageView) convertView.findViewById(R.id.like), (TextView) convertView.findViewById(R.id.grid_name));
+                    (TextView) convertView.findViewById(R.id.like), (TextView) convertView.findViewById(R.id.grid_name));
             convertView.setTag(viewTag);
         } else {
             viewTag = (ItemViewTag) convertView.getTag();
         }
-
         // set name
-        viewTag.mName.setText(mNameList[position]);
-        viewTag.like.setVisibility(isShowLike ? View.VISIBLE : View.GONE);
-        viewTag.like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(mContext, "点击了！！！" + position, Toast.LENGTH_SHORT).show();
-            }
-        });
+        viewTag.mName.setText(news.get(pos).get(position).name);
+        if (news.get(pos).get(position).num.length() > 0) {
+            viewTag.like.setText(news.get(pos).get(position).num);
+            viewTag.like.setVisibility(View.VISIBLE);
+        } else {
+            viewTag.like.setVisibility(View.INVISIBLE);
+        }
+//        viewTag.like.setVisibility(isShowLike ? View.VISIBLE : View.GONE);
+//        viewTag.like.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(mContext, "点击了！！！" + position, Toast.LENGTH_SHORT).show();
+//            }
+//        });
         // set icon
         viewTag.mIcon.setImageResource(mDrawableList[position]);
 //        viewTag.mIcon.setLayoutParams(params);
         return convertView;
     }
 
-    public void setIsShowDelete(boolean isShowLike) {
-        this.isShowLike = isShowLike;
-        notifyDataSetChanged();
-    }
-
     class ItemViewTag {
         protected ImageView mIcon;
-        protected ImageView like;
+        protected TextView like;
         protected TextView mName;
 
-        /**
-         * The constructor to construct a navigation view tag
-         *
-         * @param name the name view of the item
-         * @param icon the icon view of the item
-         */
-        public ItemViewTag(ImageView icon, ImageView like, TextView name) {
+        public ItemViewTag(ImageView icon, TextView like, TextView name) {
             this.mName = name;
             this.mIcon = icon;
             this.like = like;

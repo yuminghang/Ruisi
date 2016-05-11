@@ -10,28 +10,32 @@ import android.widget.TextView;
 
 import org.xidian.ruisi.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by ymh on 2016/5/9.
  */
 public class PartFragment_ListAdapter extends BaseAdapter {
-    private String[] data = new String[]{"西电生活", "学术交流", "休闲娱乐", "社团风采", "睿思BT", "站务管理"};
     private Activity activity;
     public static int pos = 0;
     private TextView textView, tv_left;
     private RelativeLayout relativ_layout;
+    List<String> mList = new ArrayList<String>();
 
-    public PartFragment_ListAdapter(Activity activity) {
+    public PartFragment_ListAdapter(Activity activity, List<String> mList) {
         this.activity = activity;
+        this.mList = mList;
     }
 
     @Override
     public int getCount() {
-        return data.length;
+        return mList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return data[position];
+        return mList.get(position);
     }
 
     @Override
@@ -45,7 +49,7 @@ public class PartFragment_ListAdapter extends BaseAdapter {
         textView = (TextView) view.findViewById(R.id.textView);
         tv_left = (TextView) view.findViewById(R.id.tv_left);
         relativ_layout = (RelativeLayout) view.findViewById(R.id.relativ_layout);
-        textView.setText(data[position]);
+        textView.setText(mList.get(position));
         if (pos == position) {
             textView.setTextColor(activity.getResources().getColor(R.color.orangered));
             tv_left.setVisibility(View.VISIBLE);
