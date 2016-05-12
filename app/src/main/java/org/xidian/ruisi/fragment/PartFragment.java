@@ -1,5 +1,6 @@
 package org.xidian.ruisi.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.xidian.ruisi.MyApplication;
 import org.xidian.ruisi.R;
 import org.xidian.ruisi.activity.ArticlesActivity;
 import org.xidian.ruisi.adapter.GridAdapter;
@@ -222,10 +224,19 @@ public class PartFragment extends Fragment {
         //申明给服务端传递一个json串
         //创建一个OkHttpClient对象
         OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new com.squareup.okhttp.Request.Builder()
-                .addHeader("cookie", "Q8qA_2132_saltkey=uhe1qPEu; Q8qA_2132_lastvisit=1462970604; Q8qA_2132_ulastactivity=9e4aGf7F4IJPpt%2FNju5yuebQxD80vtH7hkl%2Fv7WkmozioeWo51LJ; Q8qA_2132_auth=54baUIcHmz%2BU30%2Bvhrnf5FlkgFprkqR%2BtxXKwxurQiAxDA1kmP%2BU5IAKKcZdqMcg4fx9U872yDWiM3FDQxainiwMoZA; Q8qA_2132_lastcheckfeed=285665%7C1462974218; Q8qA_2132_lip=202.117.119.4%2C1462974567; Q8qA_2132_visitedfid=157; Q8qA_2132_st_p=285665%7C1462975418%7C5f533edede64ea7d7113975953a0b7e7; Q8qA_2132_viewid=tid_856119; Q8qA_2132_lastact=1462975433%09forum.php%09guide; Q8qA_2132_sid=z8sccj")
-                .url("http://bbs.rs.xidian.me/forum.php?forumlist=1&mobile=2")
-                .build();
+        Request request;
+        if (MyApplication.myCookie!=null) {
+            request = new com.squareup.okhttp.Request.Builder()
+                    .addHeader("Cookie", MyApplication.myCookie)
+                    .url(Apis.PARTPAGER)
+                    .build();
+        } else {
+            request = new com.squareup.okhttp.Request.Builder()
+//                    .addHeader("Cookie", MyApplication.myCookie)
+                    .url(Apis.PARTPAGER)
+                    .build();
+        }
+
 
         //发送请求获取响应
         try {

@@ -1,21 +1,20 @@
 package org.xidian.ruisi.activity;
 
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.webkit.WebView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import org.jsoup.Connection;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -23,13 +22,13 @@ import org.xidian.ruisi.R;
 import org.xidian.ruisi.adapter.ArticlesActivity_ListAdapter;
 import org.xidian.ruisi.api.Apis;
 import org.xidian.ruisi.bean.ArticleListData;
-import org.xidian.ruisi.bean.GridViewBean;
+import org.xidian.ruisi.base.BaseActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArticlesActivity extends Activity {
+public class ArticlesActivity extends BaseActivity {
 
     private String url;
     private String mTitle;
@@ -41,7 +40,9 @@ public class ArticlesActivity extends Activity {
     private Document doc;
     private Elements elements;
     long clickTime;
-
+    private ArticlesActivity_ListAdapter mListAdapter;
+    private RelativeLayout back;
+    private String html;
 
     Handler handler = new Handler() {
         @Override
@@ -52,20 +53,18 @@ public class ArticlesActivity extends Activity {
 
         }
     };
-    private ArticlesActivity_ListAdapter mListAdapter;
-    private RelativeLayout back;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_articles);
         url = Apis.BASEURL + getIntent().getStringExtra("url");
         mTitle = getIntent().getStringExtra("name");
         initView();
         initListView();
         Log.e("dwasdqw", url);
-        getData();
+        parseData();
     }
 
     private void initListView() {
@@ -97,7 +96,8 @@ public class ArticlesActivity extends Activity {
         mListView = (ListView) findViewById(R.id.listView);
     }
 
-    private void getData() {
+
+    private void parseData() {
         try {
             new Thread(runnable).start();  // 子线程
         } catch (Exception e) {
@@ -108,21 +108,13 @@ public class ArticlesActivity extends Activity {
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            Connection conn = Jsoup.connect(url);
-            // 修改http包中的header,伪装成浏览器进行抓取
-//            conn.header("User-Agent", "Mozilla/5.0 (Linux; U; Android 5.1; zh-CN; MX5 Build/LMY47I) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 UCBrowser/10.9.9.739 U3/0.8.0 Mobile Safari/534.30");
+            getData();
             doc = null;
             try {
-                doc = conn.get();
-            } catch (IOException e) {
+                doc = Jsoup.parse(html);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            // 获取下一页的链接
-//            Elements link = doc.select("li.paginate_button").select("li.next");
-//            next_page_url = link.select("a").attr("href");
-            // 获取tbody元素下的所有tr元素
-//            Elements elements = doc.select("div.postlist");
-            // 执行完毕后给handler发送一个空消息
             elements = doc.select("div.threadlist").select("li");
             for (int i = 0; i < elements.size(); i++) {
                 ArticleListData data = new ArticleListData();
@@ -143,4 +135,28 @@ public class ArticlesActivity extends Activity {
             handler.sendEmptyMessage(0);
         }
     };
+
+    private void getData() {
+        //申明给服务端传递一个json串
+        //创建一个OkHttpClient对象
+        String myCookie = getSharedPreferences("cookie", Context.MODE_PRIVATE).getString("my_cookie", "");
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new com.squareup.okhttp.Request.Builder()
+                .addHeader("cookie", myCookie)
+                .url(url)
+                .build();
+
+        //发送请求获取响应
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            //判断请求是否成功
+            if (response.isSuccessful()) {
+                //打印服务端返回结果
+                html = response.body().string();
+            } else {
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

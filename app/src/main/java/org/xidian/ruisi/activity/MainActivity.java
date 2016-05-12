@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.w3c.dom.Text;
+import org.xidian.ruisi.MyApplication;
 import org.xidian.ruisi.R;
 import org.xidian.ruisi.adapter.MyFragmentPagerAdapter;
 import org.xidian.ruisi.fragment.FaxianFragment;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MyApplication.addActivity(this);
         initViews();
         initViewpager();
         setListener();

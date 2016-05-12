@@ -4,10 +4,170 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="我的！！！！！！！" />
 
-    <include layout="@layout/webview_item" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/jiange"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/touxiang"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/shoucang">
+
+        <org.xidian.ruisi.view.CircleImageView
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/av" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/jiange"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/shoucang"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/shoucang">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/icon_favor" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:text="我的收藏"
+            android:textColor="@color/fontcolor"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="60dp"
+        android:background="@color/jiange"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/xiaoxi"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/shoucang">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/icon_sms" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:text="我的消息"
+            android:textColor="@color/fontcolor"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/jiange"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/zhuti"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/shoucang">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/icon_search_news" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:text="我的主题"
+            android:textColor="@color/fontcolor"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="60dp"
+        android:background="@color/jiange"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ziliao"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/shoucang">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/icon_datum" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:text="我的资料"
+            android:textColor="@color/fontcolor"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/jiange"></LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/shezhi"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/shoucang">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:src="@drawable/icon_set" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:text="设置"
+            android:textColor="@color/fontcolor"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/jiange"></LinearLayout>
 </LinearLayout>

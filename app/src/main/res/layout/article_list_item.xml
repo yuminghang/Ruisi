@@ -28,7 +28,7 @@
             android:maxEms="21"
             android:maxLines="2"
             android:text="这是标题"
-            android:textColor="@color/black"
+            android:textColor="@color/fontcolor"
             android:textSize="16sp" />
     </LinearLayout>
 

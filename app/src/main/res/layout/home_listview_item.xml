@@ -17,6 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="[金币]希望大家注意一下外卖摩托。中午被恶意冲撞。[金币]希望大家注意一下外卖摩托。中午被恶意冲撞。"
+            android:textColor="@color/fontcolor"
             android:textSize="16sp" />
     </LinearLayout>
 

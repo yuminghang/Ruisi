@@ -1,15 +1,11 @@
 package org.xidian.ruisi.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.transition.Fade;
@@ -28,15 +24,15 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.xidian.ruisi.MyApplication;
 import org.xidian.ruisi.R;
 import org.xidian.ruisi.api.Apis;
+import org.xidian.ruisi.base.BaseActivity;
 
 import java.io.IOException;
 
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends BaseActivity {
 
     private static final int POSTED = 1;
     private static final int NETWORK_EORR = 2;
@@ -50,7 +46,7 @@ public class LoginActivity extends Activity {
     private ImageView exit;
     private String name;
     private String password;
-    private String cookie;
+    private String cookie = "";
 
     Handler handler = new Handler() {
         @Override
@@ -59,13 +55,18 @@ public class LoginActivity extends Activity {
                 case POSTED:
                     if (result.contains("欢迎您回来")) {
                         Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                        Log.e("asdsadwqa", result);
-                        Log.e("asdsadwqa", cookie);
+                        //存到本地，下次登录用
                         SharedPreferences mCookie = getSharedPreferences("cookie", Context.MODE_PRIVATE);
                         SharedPreferences.Editor edit = mCookie.edit();
                         edit.clear();
-                        edit.putString("my_cookie", "Q8qA_2132_saltkey=uhe1qPEu; Q8qA_2132_lastvisit=1462970604; Q8qA_2132_ulastactivity=9e4aGf7F4IJPpt%2FNju5yuebQxD80vtH7hkl%2Fv7WkmozioeWo51LJ; Q8qA_2132_auth=54baUIcHmz%2BU30%2Bvhrnf5FlkgFprkqR%2BtxXKwxurQiAxDA1kmP%2BU5IAKKcZdqMcg4fx9U872yDWiM3FDQxainiwMoZA; Q8qA_2132_lastcheckfeed=285665%7C1462974218; Q8qA_2132_lip=202.117.119.4%2C1462974567; Q8qA_2132_visitedfid=157; Q8qA_2132_st_p=285665%7C1462975418%7C5f533edede64ea7d7113975953a0b7e7; Q8qA_2132_viewid=tid_856119; Q8qA_2132_lastact=1462975433%09forum.php%09guide; Q8qA_2132_sid=z8sccj");
+                        edit.putString("my_cookie", cookie);
                         edit.commit();
+                        //存到MyApplication ，接下来的网络操作用
+                        MyApplication.myCookie = cookie;
+                        MyApplication.setLoginIn();
+//                        MyApplication.closeAllActivity();
+//                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
                     } else if (result.contains("密码错误次数过多")) {
                         Toast.makeText(LoginActivity.this, "密码错误次数过多，请15分钟后重试！", Toast.LENGTH_SHORT).show();
                     } else {
@@ -104,7 +105,6 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().setEnterTransition(new Fade());
         getWindow().setExitTransition(new Fade());
@@ -166,15 +166,15 @@ public class LoginActivity extends Activity {
                 .add("password", password.trim())
                 .build();
         //创建一个请求对象
-//        Request request = new Request.Builder()
-//                .url("http://bbs.rs.xidian.me/forum.php?forumlist=1&mobile=2")
-////                .get(formBody)
-//                .build();
-//        request.newBuilder().addHeader("Cookie","Q8qA_2132_saltkey=uhe1qPEu; Q8qA_2132_lastvisit=1462970604; Q8qA_2132_ulastactivity=9e4aGf7F4IJPpt%2FNju5yuebQxD80vtH7hkl%2Fv7WkmozioeWo51LJ; Q8qA_2132_auth=54baUIcHmz%2BU30%2Bvhrnf5FlkgFprkqR%2BtxXKwxurQiAxDA1kmP%2BU5IAKKcZdqMcg4fx9U872yDWiM3FDQxainiwMoZA; Q8qA_2132_lastcheckfeed=285665%7C1462974218; Q8qA_2132_lip=202.117.119.4%2C1462974567; Q8qA_2132_visitedfid=157; Q8qA_2132_st_p=285665%7C1462975418%7C5f533edede64ea7d7113975953a0b7e7; Q8qA_2132_viewid=tid_856119; Q8qA_2132_lastact=1462975433%09forum.php%09guide; Q8qA_2132_sid=z8sccj");
-        Request request = new com.squareup.okhttp.Request.Builder()
-                .addHeader("cookie", "Q8qA_2132_saltkey=uhe1qPEu; Q8qA_2132_lastvisit=1462970604; Q8qA_2132_ulastactivity=9e4aGf7F4IJPpt%2FNju5yuebQxD80vtH7hkl%2Fv7WkmozioeWo51LJ; Q8qA_2132_auth=54baUIcHmz%2BU30%2Bvhrnf5FlkgFprkqR%2BtxXKwxurQiAxDA1kmP%2BU5IAKKcZdqMcg4fx9U872yDWiM3FDQxainiwMoZA; Q8qA_2132_lastcheckfeed=285665%7C1462974218; Q8qA_2132_lip=202.117.119.4%2C1462974567; Q8qA_2132_visitedfid=157; Q8qA_2132_st_p=285665%7C1462975418%7C5f533edede64ea7d7113975953a0b7e7; Q8qA_2132_viewid=tid_856119; Q8qA_2132_lastact=1462975433%09forum.php%09guide; Q8qA_2132_sid=z8sccj")
-                .url("http://bbs.rs.xidian.me/forum.php?forumlist=1&mobile=2")
+        Request request = new Request.Builder()
+                .url(Apis.LoginUrl)
+                .post(formBody)
                 .build();
+//        request.newBuilder().addHeader("Cookie","Q8qA_2132_saltkey=uhe1qPEu; Q8qA_2132_lastvisit=1462970604; Q8qA_2132_ulastactivity=9e4aGf7F4IJPpt%2FNju5yuebQxD80vtH7hkl%2Fv7WkmozioeWo51LJ; Q8qA_2132_auth=54baUIcHmz%2BU30%2Bvhrnf5FlkgFprkqR%2BtxXKwxurQiAxDA1kmP%2BU5IAKKcZdqMcg4fx9U872yDWiM3FDQxainiwMoZA; Q8qA_2132_lastcheckfeed=285665%7C1462974218; Q8qA_2132_lip=202.117.119.4%2C1462974567; Q8qA_2132_visitedfid=157; Q8qA_2132_st_p=285665%7C1462975418%7C5f533edede64ea7d7113975953a0b7e7; Q8qA_2132_viewid=tid_856119; Q8qA_2132_lastact=1462975433%09forum.php%09guide; Q8qA_2132_sid=z8sccj");
+//        Request request = new com.squareup.okhttp.Request.Builder()
+//                .addHeader("cookie", "Q8qA_2132_saltkey=uhe1qPEu; Q8qA_2132_lastvisit=1462970604; Q8qA_2132_ulastactivity=9e4aGf7F4IJPpt%2FNju5yuebQxD80vtH7hkl%2Fv7WkmozioeWo51LJ; Q8qA_2132_auth=54baUIcHmz%2BU30%2Bvhrnf5FlkgFprkqR%2BtxXKwxurQiAxDA1kmP%2BU5IAKKcZdqMcg4fx9U872yDWiM3FDQxainiwMoZA; Q8qA_2132_lastcheckfeed=285665%7C1462974218; Q8qA_2132_lip=202.117.119.4%2C1462974567; Q8qA_2132_visitedfid=157; Q8qA_2132_st_p=285665%7C1462975418%7C5f533edede64ea7d7113975953a0b7e7; Q8qA_2132_viewid=tid_856119; Q8qA_2132_lastact=1462975433%09forum.php%09guide; Q8qA_2132_sid=z8sccj")
+//                .url(Apis.LoginUrl)
+//                .build();
 
         //发送请求获取响应
         try {
@@ -183,14 +183,10 @@ public class LoginActivity extends Activity {
             if (response.isSuccessful()) {
                 //打印服务端返回结果
                 result = response.body().string();
-                cookie = response.header("Set-Cookie");
-//                String header = response.header("set-cookie");
-//                SharedPreferences cookie = getSharedPreferences("cookie", Context.MODE_PRIVATE);
-//                SharedPreferences.Editor edit = cookie.edit();
-//                edit.clear();
-//                edit.putString("my_cookie", header);
-//                edit.commit();
-                Log.i("success", result);
+                for (int i = 0; i < response.headers("Set-Cookie").size(); i++) {
+                    cookie += response.headers("Set-Cookie").get(i).split(";")[0] + ";";
+                }
+                Log.i("success", cookie);
                 handler.sendEmptyMessage(POSTED);
             } else {
                 handler.sendEmptyMessage(NETWORK_EORR);

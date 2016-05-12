@@ -2,10 +2,8 @@ package org.xidian.ruisi.activity;
 
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.BaseAdapter;
@@ -14,8 +12,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -23,13 +19,14 @@ import org.jsoup.select.Elements;
 import org.xidian.ruisi.R;
 import org.xidian.ruisi.adapter.CommentListAdapter;
 import org.xidian.ruisi.api.Apis;
+import org.xidian.ruisi.base.BaseActivity;
 import org.xidian.ruisi.bean.NewsDetailData;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WebViewActivity extends AppCompatActivity {
+public class WebViewActivity extends BaseActivity {
     private String url, title;
     private static ProgressBar pb;
     private ListView listView;

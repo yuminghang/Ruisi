@@ -51,11 +51,11 @@ public class PartFragment_ListAdapter extends BaseAdapter {
         relativ_layout = (RelativeLayout) view.findViewById(R.id.relativ_layout);
         textView.setText(mList.get(position));
         if (pos == position) {
-            textView.setTextColor(activity.getResources().getColor(R.color.orangered));
+            textView.setTextColor(activity.getResources().getColor(R.color.mychoice));
             tv_left.setVisibility(View.VISIBLE);
             relativ_layout.setBackgroundColor(activity.getResources().getColor(R.color.background));
         } else {
-            textView.setTextColor(activity.getResources().getColor(R.color.black));
+            textView.setTextColor(activity.getResources().getColor(R.color.fontcolor));
             tv_left.setVisibility(View.INVISIBLE);
             relativ_layout.setBackgroundColor(activity.getResources().getColor(R.color.listBack));
         }

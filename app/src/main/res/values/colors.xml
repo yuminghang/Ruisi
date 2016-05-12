@@ -119,6 +119,10 @@
     <color name="plum">#dda0dd</color>
     <!-- 洋李色 -->
     <color name="gainsboro">#dcdcdc</color>
+    <color name="fontcolor">#3d3d3b</color>
+    <color name="jiange">#ecebe9</color>
+    <color name="wodexuanzhong">#ecebe9</color>
+    <color name="wodexuanzhong_dark">#d9d9d9</color>
     <!-- 淡灰色 -->
     <color name="crimson">#dc143c</color>
     <!-- 暗深红色 -->
@@ -298,5 +302,6 @@
     <color name="navy">#000080</color>
     <!-- 海军色 -->
     <color name="white">#ffffff</color>
+    <color name="message_color">#e9edee</color>
 
 </resources>
