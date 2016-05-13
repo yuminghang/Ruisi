@@ -2,7 +2,10 @@ package org.xidian.ruisi.activity;
 
 import android.annotation.TargetApi;
 import android.app.ActivityOptions;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -18,6 +21,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import org.w3c.dom.Text;
 import org.xidian.ruisi.MyApplication;
@@ -47,15 +52,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int[] pic = new int[]{R.drawable.home_tabbar, R.drawable.newvideo_tabbar,
             R.drawable.topic_tabbar, R.drawable.mine_tabbar};
     private MyFragmentPagerAdapter myFragmentPagerAdapter;
+    public static MeFragment meFragment;
+    private FaxianFragment faxianFragment;
+    private PartFragment partFragment;
+    private HomeFragment homeFragment;
+    private MyAvatarBroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         MyApplication.addActivity(this);
+        registerMyBroadcast();
         initViews();
         initViewpager();
         setListener();
+    }
+
+    private void registerMyBroadcast() {
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("BBS.RS.XIDIAN.ME");
+        receiver = new MyAvatarBroadcastReceiver();
+        registerReceiver(receiver, intentFilter);
     }
 
     private void setListener() {
@@ -69,10 +87,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initViewpager() {
         fragmentList = new ArrayList<Fragment>();
-        HomeFragment homeFragment = new HomeFragment();
-        PartFragment partFragment = new PartFragment();
-        FaxianFragment faxianFragment = new FaxianFragment();
-        MeFragment meFragment = new MeFragment();
+        homeFragment = new HomeFragment();
+        partFragment = new PartFragment();
+        faxianFragment = new FaxianFragment();
+        meFragment = new MeFragment();
         fragmentList.add(homeFragment);
         fragmentList.add(partFragment);
         fragmentList.add(faxianFragment);
@@ -81,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager.setAdapter(myFragmentPagerAdapter);
         mViewPager.setCurrentItem(0);//设置当前显示标签页为第一页
         mViewPager.setOffscreenPageLimit(4);
+
     }
 
     private void initViews() {
@@ -123,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onKeyDown(keyCode, event);
     }
 
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onClick(View v) {
@@ -144,7 +164,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setButton(3);
                 break;
             case R.id.avatar:
-                startActivity(new Intent(this, LoginActivity.class), ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+                if (MyApplication.isLogin()) {
+                    startActivity(new Intent(this, MyDatumActivity.class));
+                } else {
+                    startActivity(new Intent(this, LoginActivity.class));
+                }
                 setButton(3);
                 break;
         }
@@ -160,6 +184,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ivlist.get(i).setImageResource(pic[i]);
             }
         }
+    }
+
+    class MyAvatarBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (MyApplication.avatarUrl.length() > 0) {
+                Glide.with(MainActivity.this).load(MyApplication.avatarUrl).into(avatar);
+                meFragment.loadAvatar(MyApplication.avatarUrl);
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
     }
 }
 

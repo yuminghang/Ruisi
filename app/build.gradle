@@ -26,4 +26,5 @@ dependencies {
     compile files('libs/jsoup-1.9.1.jar')
     compile files('libs/glide-3.7.0.jar')
     compile 'com.squareup.okhttp:okhttp:2.7.5'
+    compile 'com.google.code.gson:gson:2.6.2'
 }

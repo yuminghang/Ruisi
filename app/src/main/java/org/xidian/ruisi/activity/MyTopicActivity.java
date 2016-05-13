@@ -1,15 +1,13 @@
 package org.xidian.ruisi.activity;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
@@ -19,54 +17,41 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.xidian.ruisi.MyApplication;
 import org.xidian.ruisi.R;
-import org.xidian.ruisi.adapter.CollectListAdapter;
-import org.xidian.ruisi.adapter.DatumListAdapter;
+import org.xidian.ruisi.adapter.TopicListAdapter;
 import org.xidian.ruisi.api.Apis;
 import org.xidian.ruisi.base.BaseActivity;
-import org.xidian.ruisi.bean.MyCollectionData;
-import org.xidian.ruisi.view.CircleImageView;
+import org.xidian.ruisi.bean.MyTopicData;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class DatumActivity extends BaseActivity {
-    private CircleImageView avatar;
+public class MyTopicActivity extends BaseActivity {
     private ListView listView;
     private TextView tv_title;
-    private String[] list = new String[8];
+    ArrayList<MyTopicData> list = new ArrayList<MyTopicData>();
     private String html;
-    private String mAvatarUrl;
-    private String userName;
-    private TextView userLevelView, userNameView;
     private Document doc;
     private Elements elements;
-    private DatumListAdapter mListAdapter;
+    private TopicListAdapter mListAdapter;
     private RelativeLayout back;
-
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             // 收到消息后执行handler
             mListAdapter.notifyDataSetChanged();
-            Glide.with(DatumActivity.this).load(mAvatarUrl).into(avatar);
-            userNameView.setText(userName);
-            userLevelView.setText("西电附中");
         }
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_datum);
+        setContentView(R.layout.activity_my_topic);
         initView();
         parseData();
     }
 
     private void initView() {
-        userNameView = (TextView) findViewById(R.id.userName);
-        userLevelView = (TextView) findViewById(R.id.userLevel);
-        avatar = (CircleImageView) findViewById(R.id.avatar);
         back = (RelativeLayout) findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,8 +61,8 @@ public class DatumActivity extends BaseActivity {
         });
         listView = (ListView) findViewById(R.id.listView);
         tv_title = (TextView) findViewById(R.id.tv_title);
-        tv_title.setText("我的资料");
-        mListAdapter = new DatumListAdapter(this, list);
+        tv_title.setText("我的主题");
+        mListAdapter = new TopicListAdapter(this, list);
         listView.setAdapter(mListAdapter);
     }
 
@@ -100,12 +85,13 @@ public class DatumActivity extends BaseActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Elements elements = doc.select("div.userinfo");
-            mAvatarUrl = elements.select("div.avatar_m").select("span").select("img").attr("src");
-            userName = elements.select("h2.name").text().trim();
-            Elements elements1 = elements.select("div.user_box").select("ul").select("li");
-            for (int i = 0; i < elements1.size(); i++) {
-                list[i] = elements1.get(i).select("span").text().trim();
+            elements = doc.select("div.threadlist").select("ul").select("li");
+            for (int i = 0; i < elements.size(); i++) {
+                MyTopicData bean = new MyTopicData();
+                bean.url = elements.get(i).select("a").attr("href");
+                bean.title = elements.get(i).select("a").text();
+                bean.commentNum = elements.get(i).select("span.num").text();
+                list.add(bean);
             }
             handler.sendEmptyMessage(0);
         }
@@ -120,12 +106,12 @@ public class DatumActivity extends BaseActivity {
         if (MyApplication.myCookie != null) {
             request = new com.squareup.okhttp.Request.Builder()
                     .addHeader("Cookie", MyApplication.myCookie)
-                    .url(Apis.DatumUrl)
+                    .url(Apis.TopicUrl)
                     .build();
         } else {
             request = new com.squareup.okhttp.Request.Builder()
 //                    .addHeader("Cookie", MyApplication.myCookie)
-                    .url(Apis.DatumUrl)
+                    .url(Apis.TopicUrl)
                     .build();
         }
 

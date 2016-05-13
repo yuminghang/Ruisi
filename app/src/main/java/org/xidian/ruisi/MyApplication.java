@@ -15,7 +15,11 @@ public class MyApplication extends Application {
     private SharedPreferences sharedPreferences, sharedPreferences1;
     public static int count = 0;
     public static String myCookie;
-
+    public static String userName = "";
+    public static String uid = "";
+    public static String userGroup = "";
+    public static String groupId = "";
+    public static String avatarUrl = "";
 
     public MyApplication() {
 
@@ -29,6 +33,13 @@ public class MyApplication extends Application {
         count = sharedPreferences1.getInt("isUpload", 0);
         SharedPreferences mCookie = getSharedPreferences("cookie", Context.MODE_PRIVATE);
         myCookie = mCookie.getString("my_cookie", "");
+        uid = mCookie.getString("my_userid", "");
+        userName = mCookie.getString("my_userName", "");
+        userGroup = mCookie.getString("my_usergroup", "");
+        avatarUrl = mCookie.getString("my_avatarurl", "");
+        if (myCookie.length() > 0) {
+            isLogin = true;
+        }
         super.onCreate();
     }
 

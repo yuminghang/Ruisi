@@ -17,6 +17,7 @@
         android:background="@drawable/shoucang">
 
         <org.xidian.ruisi.view.CircleImageView
+            android:id="@+id/MeFragment_mAvatar"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_gravity="center_vertical"

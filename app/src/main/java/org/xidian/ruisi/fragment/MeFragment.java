@@ -6,16 +6,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.LinearLayout;
+
+import com.bumptech.glide.Glide;
 
 import org.xidian.ruisi.MyApplication;
 import org.xidian.ruisi.R;
-import org.xidian.ruisi.activity.DatumActivity;
+import org.xidian.ruisi.activity.MyDatumActivity;
 import org.xidian.ruisi.activity.LoginActivity;
 import org.xidian.ruisi.activity.MyCollectActivity;
 import org.xidian.ruisi.activity.MyMessageActivity;
+import org.xidian.ruisi.activity.MyTopicActivity;
 import org.xidian.ruisi.activity.SettingActivity;
+import org.xidian.ruisi.view.CircleImageView;
 
 /**
  * Created by ymh on 2016/5/6.
@@ -25,6 +28,7 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     private LinearLayout shoucang, xiaoxi, zhuti, ziliao, shezhi, touxiang;
     private View view;
     private Boolean islogin;
+    private CircleImageView MeFragment_mAvatar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,6 +38,10 @@ public class MeFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView() {
+        MeFragment_mAvatar = (CircleImageView) view.findViewById(R.id.MeFragment_mAvatar);
+        if (MyApplication.avatarUrl.length() > 0) {
+            Glide.with(getActivity()).load(MyApplication.avatarUrl).into(MeFragment_mAvatar);
+        }
         touxiang = (LinearLayout) view.findViewById(R.id.touxiang);
         shoucang = (LinearLayout) view.findViewById(R.id.shoucang);
         xiaoxi = (LinearLayout) view.findViewById(R.id.xiaoxi);
@@ -46,6 +54,10 @@ public class MeFragment extends Fragment implements View.OnClickListener {
         zhuti.setOnClickListener(this);
         ziliao.setOnClickListener(this);
         shezhi.setOnClickListener(this);
+    }
+
+    public void loadAvatar(String url) {
+        Glide.with(getActivity()).load(url).into(MeFragment_mAvatar);
     }
 
     @Override
@@ -70,14 +82,14 @@ public class MeFragment extends Fragment implements View.OnClickListener {
                 if (!islogin) {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 } else {
-//                    startActivity(new Intent(getActivity(), TvActivity.class));
+                    startActivity(new Intent(getActivity(), MyTopicActivity.class));
                 }
                 break;
             case R.id.ziliao:
                 if (!islogin) {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 } else {
-                    startActivity(new Intent(getActivity(), DatumActivity.class));
+                    startActivity(new Intent(getActivity(), MyDatumActivity.class));
                 }
                 break;
             case R.id.shezhi:

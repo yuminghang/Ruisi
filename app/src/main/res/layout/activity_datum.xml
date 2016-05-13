@@ -25,8 +25,7 @@
             android:layout_height="65dp"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="15dp"
-            android:src="@drawable/av" />
+            android:layout_marginLeft="15dp" />
 
         <TextView
             android:id="@+id/userName"
@@ -41,10 +40,10 @@
             android:id="@+id/userLevel"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="10dp"
-            android:layout_toRightOf="@id/avatar"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/avatar"
             android:textSize="12sp" />
     </RelativeLayout>
 
