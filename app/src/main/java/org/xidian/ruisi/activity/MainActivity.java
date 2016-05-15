@@ -40,9 +40,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private long exitTime;
-    private RelativeLayout home_RL, part_RL, faxian_RL, mine_RL;
-    private ImageView btn_home, btn_part, btn_faxian, btn_mine, avatar;
-    private TextView tv_home, tv_part, tv_faxian, tv_mine;
+    private RelativeLayout home_RL, part_RL, mine_RL;
+    private ImageView btn_home, btn_part,  btn_mine, avatar;
+    private TextView tv_home, tv_part,  tv_mine;
     private NoScrollViewPager mViewPager;
     private ArrayList<Fragment> fragmentList;
     List<ImageView> ivlist = new ArrayList<>();
@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setListener() {
         home_RL.setOnClickListener(this);
         part_RL.setOnClickListener(this);
-        faxian_RL.setOnClickListener(this);
         mine_RL.setOnClickListener(this);
         avatar.setOnClickListener(this);
     }
@@ -89,16 +88,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentList = new ArrayList<Fragment>();
         homeFragment = new HomeFragment();
         partFragment = new PartFragment();
-        faxianFragment = new FaxianFragment();
         meFragment = new MeFragment();
         fragmentList.add(homeFragment);
         fragmentList.add(partFragment);
-        fragmentList.add(faxianFragment);
         fragmentList.add(meFragment);
         myFragmentPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         mViewPager.setAdapter(myFragmentPagerAdapter);
         mViewPager.setCurrentItem(0);//设置当前显示标签页为第一页
-        mViewPager.setOffscreenPageLimit(4);
+        mViewPager.setOffscreenPageLimit(3);
 
     }
 
@@ -107,23 +104,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mViewPager = (NoScrollViewPager) findViewById(R.id.noScrollViewPager);
         home_RL = (RelativeLayout) findViewById(R.id.home_RL);
         part_RL = (RelativeLayout) findViewById(R.id.part_RL);
-        faxian_RL = (RelativeLayout) findViewById(R.id.faxian_RL);
         mine_RL = (RelativeLayout) findViewById(R.id.mine_RL);
         btn_home = (ImageView) findViewById(R.id.btn_home);
         btn_part = (ImageView) findViewById(R.id.btn_part);
-        btn_faxian = (ImageView) findViewById(R.id.btn_faxian);
         btn_mine = (ImageView) findViewById(R.id.btn_mine);
         tv_home = (TextView) findViewById(R.id.tv_home);
         tv_part = (TextView) findViewById(R.id.tv_part);
-        tv_faxian = (TextView) findViewById(R.id.tv_faxian);
         tv_mine = (TextView) findViewById(R.id.tv_mine);
         ivlist.add(btn_home);
         ivlist.add(btn_part);
-        ivlist.add(btn_faxian);
         ivlist.add(btn_mine);
         tvlist.add(tv_home);
         tvlist.add(tv_part);
-        tvlist.add(tv_faxian);
         tvlist.add(tv_mine);
     }
 
@@ -155,13 +147,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mViewPager.setCurrentItem(1);
                 setButton(1);
                 break;
-            case R.id.faxian_RL:
+            case R.id.mine_RL:
                 mViewPager.setCurrentItem(2);
                 setButton(2);
-                break;
-            case R.id.mine_RL:
-                mViewPager.setCurrentItem(3);
-                setButton(3);
                 break;
             case R.id.avatar:
                 if (MyApplication.isLogin()) {
@@ -169,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     startActivity(new Intent(this, LoginActivity.class));
                 }
-                setButton(3);
+                setButton(2);
                 break;
         }
     }

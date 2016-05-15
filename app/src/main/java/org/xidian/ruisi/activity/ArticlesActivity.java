@@ -1,12 +1,14 @@
 package org.xidian.ruisi.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -94,6 +96,14 @@ public class ArticlesActivity extends BaseActivity {
         });
         title.setText(mTitle);
         mListView = (ListView) findViewById(R.id.listView);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ArticlesActivity.this, WebViewActivity.class);
+                intent.putExtra("url", datas.get(position).url);
+                startActivity(intent);
+            }
+        });
     }
 
 

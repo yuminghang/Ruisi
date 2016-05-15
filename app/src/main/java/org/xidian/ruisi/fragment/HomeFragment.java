@@ -26,6 +26,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.xidian.ruisi.R;
+import org.xidian.ruisi.activity.ArticlesActivity;
 import org.xidian.ruisi.activity.WebViewActivity;
 import org.xidian.ruisi.adapter.HomeFragment_ListView_Adapter;
 import org.xidian.ruisi.adapter.HomeFragment_ViewPagerAdapter;
@@ -52,6 +53,10 @@ public class HomeFragment extends Fragment {
     private String[] mNameList = {"心灵花园", "我是女生", "缘聚睿思", "西电问答", "我要毕业啦", "学习交流", "嵌入式技术",
             "竞赛交流"
     };
+    private String[] mUrlList = {"http://bbs.rs.xidian.me/forum.php?mod=forumdisplay&fid=550&mobile=2", "http://bbs.rs.xidian.me/forum.php?mod=forumdisplay&fid=108&mobile=2",
+            "http://bbs.rs.xidian.me/forum.php?mod=forumdisplay&fid=217&mobile=2", "http://bbs.rs.xidian.me/forum.php?mod=forumdisplay&fid=551&mobile=2",
+            "http://bbs.rs.xidian.me/forum.php?mod=forumdisplay&fid=552&mobile=2", "http://bbs.rs.xidian.me/forum.php?mod=forumdisplay&fid=548&mobile=2",
+            "http://bbs.rs.xidian.me/forum.php?mod=forumdisplay&fid=144&mobile=2", "http://bbs.rs.xidian.me/forum.php?mod=forumdisplay&fid=152&mobile=2"};
     private List<ImageView> viewList;
     private View view_ViewPager, view_GridView, view;
     List<HomeFragment_ListViewData> datas = new ArrayList<HomeFragment_ListViewData>();
@@ -151,10 +156,9 @@ public class HomeFragment extends Fragment {
     private void initViewPager() {
         view_ViewPager = View.inflate(getActivity(), R.layout.home_viewpager, null);
         viewPager = (ViewPager) view_ViewPager.findViewById(R.id.viewPager);
-        int[] list = new int[3];
+        int[] list = new int[2];
         list[0] = R.drawable.viewpager1;
         list[1] = R.drawable.viewpager2;
-        list[2] = R.drawable.viewpager3;
         viewPager.setAdapter(new HomeFragment_ViewPagerAdapter(getActivity(), list));
         viewPager.setCurrentItem(0);//设置当前显示标签页为第一页
     }
@@ -164,6 +168,15 @@ public class HomeFragment extends Fragment {
         gridView = (GridView) view_GridView.findViewById(R.id.gridView);
         //配置适配器
         gridView.setAdapter(new HomeFragment_GridAdapter(getActivity(), mNameList, icon));
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), ArticlesActivity.class);
+                intent.putExtra("url", mUrlList[position]);
+                intent.putExtra("name", mNameList[position]);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initListView() {
@@ -193,12 +206,15 @@ public class HomeFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("sdasa", position + "");
-                Bundle bundle = new Bundle();
-                bundle.putString("url", datas.get(position - 3).getUrl());
-                Intent intent = new Intent(getActivity(), WebViewActivity.class);
-                intent.putExtras(bundle);
-                getActivity().startActivity(intent);
+                if (position > 2) {
+                    Log.e("sdasa", position + "");
+                    Intent intent = new Intent(getActivity(), WebViewActivity.class);
+                    intent.putExtra("url", datas.get(position - 3).getUrl());
+                    getActivity().startActivity(intent);
+                } else {
+                    return;
+                }
+
             }
         });
     }

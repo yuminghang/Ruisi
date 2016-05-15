@@ -2,6 +2,7 @@ package org.xidian.ruisi.adapter;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,6 +22,7 @@ public class HomeFragment_ViewPagerAdapter extends PagerAdapter {
         for (int i = 0; i < list.length; i++) {
             ImageView imageView = new ImageView(context);
             imageView.setImageResource(list[i]);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             viewList.add(imageView);
         }
     }
